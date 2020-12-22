@@ -1,0 +1,62 @@
+<Button>
+    size_hint: (None, None)
+    size: (300, 100)
+    background_normal: ''
+    background_color: (65/255.0, 65/255.0, 65/255.0, 1.0)
+
+
+<Box>
+    quit_btn:quit_btn
+    start_btn:start_btn
+
+    # Background color
+    canvas.before:
+        Color:
+            rgba: (0.7, 0.7, 0.7, 1.0)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    #Background image
+    Image:
+        source: 'ELE-hra.png'
+        allow_stretch: True
+        keep_ratio: False
+       # size_hint: (None, None)
+        pos_hint: {'center_y': 0.5}
+        size: (800, 600)
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        padding: (250, 0)
+        spacing: 20
+
+        Button:
+            id: start_btn
+            text: 'Start game'
+            on_press: root.press()
+
+        Button:
+            id: quit_btn
+            text: 'Quit'
+            on_press: root.press()
+
+    FloatLayout:
+        size: root.width, root.height
+
+        Label:
+            text: 'Learn electrotechnics !'
+            font_size: 60
+            pos_hint:{"x":0.33,"y":0.5}
+            size_hint: (None, None)
+            size: (300, 100)
+           # background_color: (65/255.0, 65/255.0, 65/255.0, 1.0)
+           # canvas.before:
+           #     Color:
+           #         rgba: self.background_color
+           #     Rectangle:
+           #         size: self.size
+           #         pos: self.pos
+            color: (1.0, 0.0, 0.0, 1.0)
+            bold: True

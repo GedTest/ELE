@@ -2,8 +2,7 @@
   "d1": {
     "type": "Diode",
     "name": "D1",
-    "power": 60,
-    "voltage": 230,
+    "value": 60.0,
     "left": 500,
     "top": 150,
     "radius": 50
@@ -13,7 +12,7 @@
     "name": "R1",
     "left": 600,
     "top": 125,
-    "resistance": 60,
+    "value": 60.0,
     "is_vertical": false
   },
   "r2": {
@@ -21,7 +20,7 @@
     "name": "R2",
     "left": 500,
     "top": 610,
-    "resistance": 10,
+    "value": 10.0,
     "is_vertical": false
   },
   "r3": {
@@ -29,7 +28,7 @@
     "name": "R3",
     "left": 225,
     "top": 455,
-    "resistance": 20,
+    "value": 20.0,
     "is_vertical": true
   },
   "s1": {
@@ -51,7 +50,7 @@
   "ps": {
     "type": "PowerSupply",
     "name": "PS",
-    "voltage": 230,
+    "value": 230.0,
     "left": 300,
     "top": 155
   },

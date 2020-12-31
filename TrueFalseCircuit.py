@@ -1,6 +1,7 @@
 import pygame
+
 import json
-from Components import Resistor, Diode, Button, Switch, PowerSupply, COLOR_BLACK, COLOR_WHITE
+from Components import Resistor, Diode, Button, Switch, PowerSupply, MultiMeter, COLOR_BLACK, COLOR_WHITE
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
@@ -21,20 +22,23 @@ components = []
 for key in data.keys():
     if key != "level_answer":
         if data[key]["type"] == "Diode":
-            components.append(Diode(data[key]["name"], data[key]["power"], data[key]["voltage"], data[key]["left"],
+            components.append(Diode(data[key]["name"], data[key]["value"], data[key]["left"],
                                     data[key]["top"], data[key]["radius"]))
         if data[key]["type"] == "Resistor":
-            components.append(Resistor(data[key]["name"], data[key]["resistance"], data[key]["left"], data[key]["top"],
-                                       data[key]["is_vertical"]))
+            components.append(Resistor(data[key]["name"], data[key]["value"], data[key]["left"],
+                                       data[key]["top"], data[key]["is_vertical"]))
         if data[key]["type"] == "Switch":
             components.append(Switch(data[key]["name"], data[key]["left"], data[key]["top"], data[key]["radius"],
                                      data[key]["mode_on"]))
         if data[key]["type"] == "PowerSupply":
-            components.append(PowerSupply(data[key]["name"], data[key]["voltage"], data[key]["left"], data[key]["top"]))
+            components.append(PowerSupply(data[key]["name"], data[key]["value"], data[key]["left"], data[key]["top"]))
     else:
         level_answer = data[key]
 
+multi_meter = MultiMeter(980, 100, 200, 300)
+components.append(multi_meter)
 
+dragging = False
 running = True
 while running:
     mouse = pygame.mouse.get_pos()
@@ -51,6 +55,20 @@ while running:
             elif f_btn.is_clickable(mouse):
                 player_guess = f_btn.text
 
+        # ----------multi-meter----------
+            if e.button == 1 and multi_meter.collide_with_mouse(e.pos):
+                dragging = True
+
+        elif e.type == pygame.MOUSEMOTION:
+            if dragging:
+                multi_meter.follow_mouse(e.pos)
+
+        elif e.type == pygame.MOUSEBUTTONUP:
+            dragging = False
+            multi_meter.pin_left = 1055
+            multi_meter.pin_top = 450
+        # ----------multi-meter----------
+
     # Background color
     screen.fill(COLOR_WHITE)
 
@@ -59,10 +77,12 @@ while running:
     pygame.draw.rect(screen, COLOR_WHITE, [260, 160, 680, 480])
 
     for component in components:
-        component.Draw(screen)
+        component.draw(screen)
+        if multi_meter.is_colliding(component):
+            multi_meter.display_text = str(component.value) + component.unit
 
-    t_btn.Draw(mouse, screen)
-    f_btn.Draw(mouse, screen)
+    t_btn.draw(mouse, screen)
+    f_btn.draw(mouse, screen)
 
     # Display a text on the screen
     font = pygame.font.SysFont('Consolas', 30)

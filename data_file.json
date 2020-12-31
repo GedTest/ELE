@@ -1,0 +1,59 @@
+{
+  "d1": {
+    "type": "Diode",
+    "name": "D1",
+    "power": 60,
+    "voltage": 230,
+    "left": 500,
+    "top": 150,
+    "radius": 50
+  },
+  "r1": {
+    "type": "Resistor",
+    "name": "R1",
+    "left": 600,
+    "top": 125,
+    "resistance": 60,
+    "is_vertical": false
+  },
+  "r2": {
+    "type": "Resistor",
+    "name": "R2",
+    "left": 500,
+    "top": 610,
+    "resistance": 10,
+    "is_vertical": false
+  },
+  "r3": {
+    "type": "Resistor",
+    "name": "R3",
+    "left": 225,
+    "top": 455,
+    "resistance": 20,
+    "is_vertical": true
+  },
+  "s1": {
+    "type": "Switch",
+    "name": "S1",
+    "left": 325,
+    "top": 645,
+    "radius": 15,
+    "mode_on": 1
+  },
+  "s2": {
+    "type": "Switch",
+    "name": "S2",
+    "left": 750,
+    "top": 645,
+    "radius": 15,
+    "mode_on": 2
+  },
+  "ps": {
+    "type": "PowerSupply",
+    "name": "PS",
+    "voltage": 230,
+    "left": 300,
+    "top": 155
+  },
+  "level_answer": "No"
+}

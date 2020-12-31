@@ -1,5 +1,6 @@
 import pygame
-from Components import Resistor, Diode, Button
+import json
+from Components import Resistor, Diode, Button, Switch, PowerSupply, COLOR_BLACK, COLOR_WHITE
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
@@ -7,16 +8,32 @@ SCREEN_HEIGHT = 800
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+level_answer = ''
+player_guess = ''
 
-f_btn = Button(1000, 600, 150, 100, (170, 170, 170), "False")
-t_btn = Button(50, 600, 150, 100, (170, 170, 170), "True")
+f_btn = Button(1000, 600, 150, 100, (170, 170, 170), "No")
+t_btn = Button(50, 600, 150, 100, (170, 170, 170), "Yes")
 
-d1 = Diode(500, 150, 50)
-r1 = Resistor(600, 125, 160, 70, (90, 90, 90), "R1")
-r2 = Resistor(500, 610, 160, 70, (90, 90, 90), "R2")
-r3 = Resistor(225, 455, 70, 160, (90, 90, 90), "R3")
+with open("data_file.json", "r") as components_file:
+    data = json.load(components_file)
 
-components = (d1, r1, r2, r3)
+components = []
+for key in data.keys():
+    if key != "level_answer":
+        if data[key]["type"] == "Diode":
+            components.append(Diode(data[key]["name"], data[key]["power"], data[key]["voltage"], data[key]["left"],
+                                    data[key]["top"], data[key]["radius"]))
+        if data[key]["type"] == "Resistor":
+            components.append(Resistor(data[key]["name"], data[key]["resistance"], data[key]["left"], data[key]["top"],
+                                       data[key]["is_vertical"]))
+        if data[key]["type"] == "Switch":
+            components.append(Switch(data[key]["name"], data[key]["left"], data[key]["top"], data[key]["radius"],
+                                     data[key]["mode_on"]))
+        if data[key]["type"] == "PowerSupply":
+            components.append(PowerSupply(data[key]["name"], data[key]["voltage"], data[key]["left"], data[key]["top"]))
+    else:
+        level_answer = data[key]
+
 
 running = True
 while running:
@@ -29,30 +46,35 @@ while running:
         # checks if a mouse is clicked
         if e.type == pygame.MOUSEBUTTONDOWN:
             if t_btn.is_clickable(mouse):
-                print(t_btn.text)
-                d1.on()
+                player_guess = t_btn.text
 
             elif f_btn.is_clickable(mouse):
-                print(f_btn.text)
-                d1.off()
+                player_guess = f_btn.text
 
     # Background color
-    screen.fill((255, 255, 255))
+    screen.fill(COLOR_WHITE)
 
     # Display a circuit rectangle
-    pygame.draw.rect(screen, (0, 0, 0), [250, 150, 700, 500])
-    pygame.draw.rect(screen, (255, 255, 255), [260, 160, 680, 480])
-
-    # Display a text on the screen
-    font = pygame.font.SysFont('Consolas', 30)
-    heading = font.render("True or False?", True, (255, 0, 0))
-    screen.blit(heading, (32, 48))
+    pygame.draw.rect(screen, COLOR_BLACK, [250, 150, 700, 500])
+    pygame.draw.rect(screen, COLOR_WHITE, [260, 160, 680, 480])
 
     for component in components:
         component.Draw(screen)
 
     t_btn.Draw(mouse, screen)
     f_btn.Draw(mouse, screen)
+
+    # Display a text on the screen
+    font = pygame.font.SysFont('Consolas', 30)
+    heading = font.render("Is this scheme working??", True, (255, 0, 0))
+    screen.blit(heading, (32, 48))
+
+    # Compare player's guest with correct answer and display it on the screen
+    if player_guess:
+        result = "Correct" if player_guess == level_answer else "Incorrect"
+        font = pygame.font.SysFont('Consolas', 60)
+        text = font.render(result, True, (0, 255, 0))
+        screen.blit(text, (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2))
 
     pygame.display.flip()
     pygame.display.update()

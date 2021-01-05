@@ -15,10 +15,12 @@ player_guess = ''
 f_btn = Button(1000, 600, 150, 100, (170, 170, 170), "No")
 t_btn = Button(50, 600, 150, 100, (170, 170, 170), "Yes")
 
+ps5 = PowerSupply("PS5", 230.0, 450, 400)
+
 with open("data_file.json", "r") as components_file:
     data = json.load(components_file)
 
-components = []
+components = [ps5]
 for key in data.keys():
     if key != "level_answer":
         if data[key]["type"] == "Diode":
@@ -54,6 +56,9 @@ while running:
 
             elif f_btn.is_clickable(mouse):
                 player_guess = f_btn.text
+
+            elif ps5.collide_with_mouse(mouse):
+                print("Hello")
 
         # ----------multi-meter----------
             if e.button == 1 and multi_meter.collide_with_mouse(e.pos):

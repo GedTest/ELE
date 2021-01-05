@@ -58,6 +58,10 @@ class Diode:
                          (self.left + self.radius / 1.5, self.top - self.radius / 1.5), 7)
         screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top+self.radius))
 
+    def collide_with_mouse(self, mouse):
+        hypotenuse = sqrt(((self.left - mouse[0]) ** 2) + ((self.top - mouse[1]) ** 2))
+        return hypotenuse <= self.radius
+
     @property
     def switch_on(self):
         return self.__switch_on
@@ -110,6 +114,7 @@ class Switch:
         self.font = pygame.font.SysFont('Consolas', 40)
         self.left = left
         self.top = top
+        self.width = 65
         self.radius = radius
         self.mode = mode_on
 
@@ -117,14 +122,18 @@ class Switch:
         pygame.draw.circle(screen, COLOR_BLACK, (self.left, self.top), self.radius)
         pygame.draw.circle(screen, COLOR_WHITE, (self.left, self.top), self.radius-3)
 
-        pygame.draw.circle(screen, COLOR_BLACK, (self.left+65, self.top), self.radius)
-        pygame.draw.circle(screen, COLOR_WHITE, (self.left+65, self.top), self.radius-3)
+        pygame.draw.circle(screen, COLOR_BLACK, (self.left+self.width, self.top), self.radius)
+        pygame.draw.circle(screen, COLOR_WHITE, (self.left+self.width, self.top), self.radius-3)
 
         pygame.draw.line(screen, COLOR_WHITE, (self.left+self.radius-1, self.top),
-                         (self.left+65-self.radius, self.top), 15)
+                         (self.left+self.width-self.radius, self.top), 15)
         pygame.draw.line(screen, COLOR_BLACK, (self.left, self.top-self.radius),
-                         (self.left + 65, self.top-(self.radius*self.mode)), 5)
+                         (self.left + self.width, self.top-(self.radius*self.mode)), 5)
         screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top+self.radius))
+
+    def collide_with_mouse(self, mouse):
+        return self.left-self.radius <= mouse[0] <= self.left+self.width+self.radius and \
+               self.top-self.radius <= mouse[1] <= self.top+7.5+self.radius
 
 
 class PowerSupply:
@@ -135,6 +144,7 @@ class PowerSupply:
         self.unit = "V"
         self.left = left
         self.top = top
+        self.width = 35
         self.small_offset = 20
         self.big_offset = 50
 
@@ -142,10 +152,14 @@ class PowerSupply:
         pygame.draw.line(screen, COLOR_BLACK, (self.left, self.top - self.big_offset),
                          (self.left, self.top + self.big_offset), 5)
         pygame.draw.line(screen, COLOR_WHITE, (self.left+3, self.top),
-                         (self.left+35, self.top), 15)
-        pygame.draw.line(screen, COLOR_BLACK, (self.left+35, self.top-self.small_offset),
-                         (self.left+35, self.top+self.small_offset), 5)
+                         (self.left+self.width, self.top), 15)
+        pygame.draw.line(screen, COLOR_BLACK, (self.left+self.width, self.top-self.small_offset),
+                         (self.left+self.width, self.top+self.small_offset), 5)
         screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top+self.big_offset))
+
+    def collide_with_mouse(self, mouse):
+        return self.left <= mouse[0] <= self.left+self.width and \
+               self.top-self.big_offset <= mouse[1] <= self.top+self.big_offset
 
 
 class MultiMeter(pygame.Rect):

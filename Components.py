@@ -103,12 +103,10 @@ class Diode:
         return self.__value
 
 
-class Resistor(pygame.Rect):
-    """Simple Resistor class that renders self on the screen.
-    Inherited from 'pygame.Rect' class"""
+class Resistor:
+    """Simple Resistor class that renders self on the screen."""
 
     def __init__(self, name, value, left, top, is_vertical=False, width=160, height=70):
-        super(Resistor, self).__init__(self)
         self.name = name
         self.font = pygame.font.SysFont('Consolas', 40)
         self.__value = value
@@ -129,6 +127,11 @@ class Resistor(pygame.Rect):
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, [self.left, self.top, self.width, self.height])
         screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top))
+
+    def collide_with_mouse(self, mouse):
+        """Check if the mouse is within rect borders of a given object"""
+        return self.left <= mouse[0] <= self.left + self.width and \
+               self.top - self.width <= mouse[1] <= self.top + self.height
 
     @property
     def value(self):

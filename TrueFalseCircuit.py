@@ -5,6 +5,8 @@ from Components import Resistor, Diode, Button, Switch, PowerSupply, MultiMeter,
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
+COLOR_GREEN = (0, 255, 0)
+COLOR_RED = (255, 0, 0)
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -67,6 +69,7 @@ while running:
             dragging = False
             multi_meter.pin_left = 1055
             multi_meter.pin_top = 450
+            multi_meter.display_text = "0.0"
         # ----------multi-meter----------
 
     # Background color
@@ -86,14 +89,15 @@ while running:
 
     # Display a text on the screen
     font = pygame.font.SysFont('Consolas', 30)
-    heading = font.render("Is this scheme working??", True, (255, 0, 0))
+    heading = font.render("Is this scheme working??", True, COLOR_BLACK)
     screen.blit(heading, (32, 48))
 
     # Compare player's guest with correct answer and display it on the screen
     if player_guess:
         result = "Correct" if player_guess == level_answer else "Incorrect"
+        result_color = COLOR_GREEN if player_guess == level_answer else COLOR_RED
         font = pygame.font.SysFont('Consolas', 60)
-        text = font.render(result, True, (0, 255, 0))
+        text = font.render(result, True, result_color)
         screen.blit(text, (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2))
 
     pygame.display.flip()

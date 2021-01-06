@@ -1,43 +1,31 @@
 import pygame
-from pygame.constants import K_NUMLOCKCLEAR, MOUSEBUTTONDOWN, MOUSEBUTTONUP
-from pygame.event import event_name
-from Components import Resistor, Diode, Button, PowerSupply, Switch
-from data_build_circuit import zadani1, zadani2
+from pygame.constants import MOUSEBUTTONDOWN, MOUSEBUTTONUP
+from Components import Button
+from data_build_circuit import task1, task2, task3
 from task_loader import load_scheme
-
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 800
+from constants import *
+from round_controller import end_round, next_round
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-next_btn = Button(1000, 600, 150, 100, (170, 170, 170), "Další")
+next_btn = Button(520, 400, 150, 100, (170, 170, 170), "Další")
 
-tasks = [zadani1, zadani2]
+tasks = [task1, task2, task3]
 components = []
 
 offset_x = 0
 offset_y = 0
 task_id = 0
-next_task = False
 draging = False
 won_the_round = False
 running = True
 
 load_scheme(tasks[task_id], components)
 
-for choose_component in components:
-    if choose_component.name == "R1": 
-        r1 = choose_component
-        r1.name = ""
-        
-    if choose_component.name == "R3":
-        r3 = choose_component
-        r3.name = "R?" 
-
 while running:
     mouse = pygame.mouse.get_pos()
-    
+
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
@@ -45,9 +33,6 @@ while running:
         # checks if a mouse is clicked
         elif e.type == MOUSEBUTTONDOWN:
             if e.button == 1:
-                if next_btn.is_clickable(mouse):
-                    next_task = True
-                    task_id += 1
                 draging = True
                 #if r3.collide_with_mouse(e.pos):
                 if r3.collidepoint(e.pos):
@@ -61,14 +46,15 @@ while running:
                 draging = False
                 #if r3.is_colliding(r1):
                 if r3.colliderect(r1):
-                    print("koliduji")
-                    
+                    won_the_round = True
+                    task_id += 1
                     r3.width = 0
                     r3.height = 0
                     r3.name = ""
                     r1.color = (90,90,90)
                     r1.name = "R1"
-                    won_the_round = True
+                   
+                    print("volam")
                 else:
                     r3.left = 1100
                     r3.top = 50
@@ -88,23 +74,28 @@ while running:
 
     # Display a text on the screen
     font = pygame.font.SysFont('Consolas', 30)
-    win_font = pygame.font.SysFont('Consolas', 60)
     heading = font.render("Zapoj obvod", True, (0, 0, 0))
-    win_screen = win_font.render("Výborně!", True, (0, 0, 0))
     screen.blit(heading, (32, 48))
-    
-    if won_the_round:
-        screen.blit(win_screen, ((SCREEN_WIDTH - win_screen.get_width())/2 , (SCREEN_HEIGHT - win_screen.get_height())/2))
-        next_btn.draw(mouse, screen)
 
-    if next_task:
-        load_scheme(tasks[task_id], components)
+    if won_the_round and task_id != len(tasks):
+        if next_round(screen, mouse, task_id, components, tasks):
+            won_the_round = False
 
+    elif task_id == len(tasks):
+        if end_round(screen,mouse):
+            pygame.quit()
+        
     for component in components:
+        if component.name == "R1": 
+            r1 = component
+            r1.name = ""
+    
+        if component.name == "R3":
+            r3 = component
+            r3.name = "R?" 
+            
         component.draw(screen)
-
-   
-
+    
     pygame.display.flip()
     pygame.display.update()
 pygame.quit()

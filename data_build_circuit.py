@@ -1,4 +1,4 @@
-zadani1 = [
+task1 = [
    {
     "type": "Diode",
     "name": "D1",
@@ -59,7 +59,7 @@ zadani1 = [
   }
 ]
 
-zadani2 = [
+task2 = [
    {
     "type": "Diode",
     "name": "D1",
@@ -96,5 +96,25 @@ zadani2 = [
     "is_invisible": False
   },
 
+]
+
+task3 = [
+   {
+    "type": "Diode",
+    "name": "D1",
+    "value": 60.0,
+    "left": 500,
+    "top": 150,
+    "radius": 50
+  },
+  {
+    "type": "Resistor",
+    "name": "R1",
+    "left": 600,
+    "top": 125,
+    "value": 60.0,
+    "is_vertical": False,
+    "is_invisible": True
+  }
 ]
    

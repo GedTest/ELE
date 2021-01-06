@@ -5,7 +5,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.lang import Builder
 
 def thread_lvl1():
-    os.system("python TrueFalseCircuit.py")
+    os.system("python BuildTheCircuit.py")
 def thread_lvl2():
     pass    
 def thread_lvl3():

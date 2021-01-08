@@ -1,7 +1,7 @@
 import pygame
 
 import json
-from Components import Resistor, Diode, Button, Switch, PowerSupply, MultiMeter, COLOR_BLACK, COLOR_WHITE
+from components import Resistor, Diode, Button, Switch, PowerSupply, MultiMeter, COLOR_BLACK, COLOR_WHITE
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
@@ -20,25 +20,26 @@ t_btn = Button(50, 600, 150, 100, (170, 170, 170), "Yes")
 with open("data_file.json", "r") as components_file:
     data = json.load(components_file)
 
-components = []
+all_components = []
 for key in data.keys():
     if key != "level_answer":
         if data[key]["type"] == "Diode":
-            components.append(Diode(data[key]["name"], data[key]["value"], data[key]["left"],
-                                    data[key]["top"], data[key]["radius"]))
+            all_components.append(Diode(data[key]["name"], data[key]["value"], data[key]["left"],
+                                        data[key]["top"], data[key]["radius"]))
         if data[key]["type"] == "Resistor":
-            components.append(Resistor(data[key]["name"], data[key]["value"], data[key]["left"],
-                                       data[key]["top"], data[key]["is_vertical"]))
+            all_components.append(Resistor(data[key]["name"], data[key]["value"], data[key]["left"],
+                                           data[key]["top"], data[key]["is_vertical"]))
         if data[key]["type"] == "Switch":
-            components.append(Switch(data[key]["name"], data[key]["left"], data[key]["top"], data[key]["radius"],
-                                     data[key]["mode_on"]))
+            all_components.append(Switch(data[key]["name"], data[key]["left"], data[key]["top"], data[key]["radius"],
+                                         data[key]["mode_on"]))
         if data[key]["type"] == "PowerSupply":
-            components.append(PowerSupply(data[key]["name"], data[key]["value"], data[key]["left"], data[key]["top"]))
+            all_components.append(PowerSupply(data[key]["name"], data[key]["value"], data[key]["left"],
+                                              data[key]["top"]))
     else:
         level_answer = data[key]
 
 multi_meter = MultiMeter(980, 100, 200, 300)
-components.append(multi_meter)
+all_components.append(multi_meter)
 
 dragging = False
 running = True
@@ -79,7 +80,7 @@ while running:
     pygame.draw.rect(screen, COLOR_BLACK, [250, 150, 700, 500])
     pygame.draw.rect(screen, COLOR_WHITE, [260, 160, 680, 480])
 
-    for component in components:
+    for component in all_components:
         component.draw(screen)
         if multi_meter.is_colliding(component):
             multi_meter.display_text = str(component.value) + component.unit

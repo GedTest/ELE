@@ -6,8 +6,8 @@ from constants import *
 
 pygame.init()
 
-next_btn = Button(520, 400, 150, 100, COLOR_GREY, "Další")
-end_btn = Button(520, 400, 150, 100, COLOR_GREY, "Konec")
+next_btn = Button(520, 400, 150, 100, COLOR_DARK_GREY, "Další")
+end_btn = Button(520, 400, 150, 100, COLOR_DARK_GREY, "Konec")
 
 win_font = pygame.font.SysFont('Consolas', 60)
 win_screen = win_font.render("Výborně!", True, COLOR_GREEN)

@@ -1,10 +1,9 @@
 import pygame
 from math import sqrt
-from constants import COLOR_WHITE, COLOR_BLACK
+from constants import *
 
 """
 This file contents list of component classes used in our game.
-
 Classes are:
     Button
     Diode
@@ -44,7 +43,7 @@ class Button(pygame.Rect):
             mouse) else self.dark_color
         pygame.draw.rect(screen, self.state_color, [
                          self.left, self.top, self.width, self.height])
-        screen.blit(self.font.render(self.text, True, (0, 255, 0)),
+        screen.blit(self.font.render(self.text, True, COLOR_GREEN),
                     (self.left + 20, self.top + 30))
 
 
@@ -60,7 +59,7 @@ class Diode:
         self.left = left
         self.top = top
         self.radius = radius
-        self.__switch_on = (255, 255, 0)
+        self.__switch_on = COLOR_YELLOW
         self.__switch_off = COLOR_WHITE
         self.light = self.switch_off
 
@@ -101,10 +100,12 @@ class Diode:
         return self.__value
 
 
-class Resistor:
-    """Simple Resistor class that renders self on the screen."""
+class Resistor(pygame.Rect):
+    """Simple Resistor class that renders self on the screen.
+    Inherited from 'pygame.Rect' class"""
 
     def __init__(self, name, value, left, top, is_vertical=False, is_invisible=False, width=160, height=70):
+        super(Resistor, self).__init__(self)
         self.name = name
         self.font = pygame.font.SysFont('Consolas', 40)
         self.__value = value
@@ -120,20 +121,17 @@ class Resistor:
             self.width = self.height
             self.height = temp
 
-
         if is_invisible:
-            self.color = (255,255,255)
+            self.color = COLOR_WHITE
         else:
-            self.color = (90, 90, 90)
+            self.color = COLOR_LIGHT_GREY
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, [self.left, self.top, self.width, self.height])
         screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top))
 
     def collide_with_mouse(self, mouse):
-        """Check if the mouse is within rect borders of a given object"""
-        return self.left <= mouse[0] <= self.left + self.width and \
-               self.top - self.width <= mouse[1] <= self.top + self.height
+        self.collidepoint(mouse)
 
     @property
     def value(self):
@@ -168,7 +166,21 @@ class Switch:
     def collide_with_mouse(self, mouse):
         """Check if the mouse is within rect borders of a given object"""
         return self.left-self.radius <= mouse[0] <= self.left+self.width+self.radius and \
-               self.top-self.radius <= mouse[1] <= self.top+7.5+self.radius
+            self.top-self.radius <= mouse[1] <= self.top+7.5+self.radius
+
+    def is_colliding(self, other_object):
+        """Handles collision with these objects: Diode, Resistor, PowerSupply"""
+        if type(other_object) is Diode:
+            hypotenuse = sqrt(((self.left - other_object.left)**2) + ((self.top - other_object.top)**2))
+            return hypotenuse <= other_object.radius
+
+        if type(other_object) is Resistor:
+            return other_object.left <= self.left <= other_object.left + other_object.width and \
+                    other_object.top <= self.top <= other_object.top + other_object.height
+
+        if type(other_object) is PowerSupply:
+            return other_object.left <= self.left <= other_object.left+35 and \
+                   other_object.top-50 <= self.top <= other_object.top+50
 
 
 class PowerSupply:
@@ -197,7 +209,7 @@ class PowerSupply:
     def collide_with_mouse(self, mouse):
         """Check if the mouse is within rect borders of a given object"""
         return self.left <= mouse[0] <= self.left+self.width and \
-               self.top-self.big_offset <= mouse[1] <= self.top+self.big_offset
+            self.top-self.big_offset <= mouse[1] <= self.top+self.big_offset
 
 
 class MultiMeter(pygame.Rect):
@@ -259,7 +271,7 @@ class MultiMeter(pygame.Rect):
         self.pin_top = mouse[1]
 
     def reset(self):
-        """If mouse is not holding multimeter, reset its position, and display zero values"""
+        """If mouse isn't dragging a pin, reset its position and display zero values"""
         self.pin_left = 1055
         self.pin_top = 450
         self.display_text = "0.0"

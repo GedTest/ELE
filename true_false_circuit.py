@@ -14,8 +14,8 @@ level_answer = ''
 player_guess = ''
 
 next_btn = Button(520, 400, 150, 100, (170, 170, 170), "Další")
-f_btn = Button(1000, 600, 150, 100, COLOR_GREY, "No")
-t_btn = Button(50, 600, 150, 100, COLOR_GREY, "Yes")
+f_btn = Button(1000, 600, 150, 100, COLOR_DARK_GREY, "No")
+t_btn = Button(50, 600, 150, 100, COLOR_DARK_GREY, "Yes")
 
 #with open("data_file.json", "r") as components_file:
 #    data = json.load(components_file)
@@ -107,6 +107,7 @@ while running:
         # if player won
         if player_guess == level_answer:
             won_the_round = True
+            print(task_id)
             task_id += 1
         else:
             font = pygame.font.SysFont('Consolas', 60)

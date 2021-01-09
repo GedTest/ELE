@@ -67,6 +67,21 @@ class Component:
         else:
             self.color = COLOR_BLACK
 
+    def is_colliding(self, component):
+        """Handles collision with these objects: Diode, Resistor, PowerSupply"""
+        if type(component) is Diode:
+            hypotenuse = sqrt(((self.pin_left - component.left) ** 2)
+                              + ((self.pin_top - component.top) ** 2))
+            return hypotenuse <= self.pin_radius + component.radius
+
+        if type(component) is Resistor:
+            return component.left <= self.pin_left <= component.left + component.width and \
+                   component.top <= self.pin_top <= component.top + component.height
+
+        if type(component) is PowerSupply:
+            return component.left <= self.pin_left <= component.left + 35 \
+                   and component.top - 50 <= self.pin_top <= component.top + 50
+
     @property
     def value(self):
         return self.__value
@@ -296,8 +311,8 @@ class MultiMeter(pygame.Rect):
         self.pin_top = mouse[1]
 
     def reset(self):
-        """If mouse isn't dragging a pin, reset its position and display zero v
-        alues"""
+        """If mouse isn't dragging a pin, reset its position and
+        display zero values"""
         self.pin_left = 1055
         self.pin_top = 450
         self.display_text = "0.0"

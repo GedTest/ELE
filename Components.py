@@ -15,7 +15,6 @@ Classes are:
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 
-
 class Button(pygame.Rect):
     """Simple Button class that checks if is button clicked via collision function. Also, renders self on the screen."""
 
@@ -53,8 +52,7 @@ class Diode:
     """Simple Diode class that renders self on the screen, checks collision with the mouse
      and can switch between light modes."""
 
-    def __init__(self, name, value, left, top, radius):
-        self.name = name
+    def __init__(self, name, value, left, top, radius, is_invisible=False, is_choosable=False):
         self.__value = value
         self.unit = "W"
         self.font = pygame.font.SysFont('Consolas', 40)
@@ -64,22 +62,45 @@ class Diode:
         self.__switch_on = (255, 255, 0)
         self.__switch_off = COLOR_WHITE
         self.light = self.switch_off
+        self.is_invisible = is_invisible
+        self.is_choosable = is_choosable
+        
+        if self.is_invisible:
+            self.color = (255, 255, 255)
+            self.name = ""
+
+        else:
+            self.color = (0, 0, 0)
+
+        if self.is_choosable:
+            self.name = "D?"
+        else:
+            self.name = name
 
     def draw(self, screen):
-        pygame.draw.circle(screen, COLOR_BLACK, (self.left, self.top), self.radius)
+        pygame.draw.circle(screen, self.color,
+                           (self.left, self.top), self.radius)
         pygame.draw.circle(screen, self.light,
                            (self.left, self.top), self.radius - 5)
 
-        pygame.draw.line(screen, COLOR_BLACK, (self.left - self.radius / 1.5, self.top - self.radius / 1.5),
+        pygame.draw.line(screen, self.color, (self.left - self.radius / 1.5, self.top - self.radius / 1.5),
                          (self.left + self.radius / 1.5, self.top + self.radius / 1.5), 7)
-        pygame.draw.line(screen, COLOR_BLACK, (self.left - self.radius / 1.5, self.top + self.radius / 1.5),
+        pygame.draw.line(screen, self.color, (self.left - self.radius / 1.5, self.top + self.radius / 1.5),
                          (self.left + self.radius / 1.5, self.top - self.radius / 1.5), 7)
-        screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top+self.radius))
+        screen.blit(self.font.render(self.name, True, self.color),
+                    (self.left, self.top+self.radius))
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse position is shorter or equal than the radius"""
-        hypotenuse = sqrt(((self.left - mouse[0]) ** 2) + ((self.top - mouse[1]) ** 2))
+        hypotenuse = sqrt(
+            ((self.left - mouse[0]) ** 2) + ((self.top - mouse[1]) ** 2))
         return hypotenuse <= self.radius
+
+    def is_colliding(self, other_object):
+        if type(other_object) is Diode:
+            return True
+        else:
+            return False
 
     @property
     def switch_on(self):
@@ -102,12 +123,10 @@ class Diode:
         return self.__value
 
 
-class Resistor(pygame.Rect):
-    """Simple Resistor class that renders self on the screen.
-    Inherited from 'pygame.Rect' class"""
+class Resistor:
+    """Simple Resistor class that renders self on the screen."""
 
-    def __init__(self, name, value, left, top, is_vertical=False, is_invisible=False, width=160, height=70):
-        super(Resistor, self).__init__(self)
+    def __init__(self, name, value, left, top, is_vertical=False, is_invisible=False, is_choosable=False, width=160, height=70):
         self.name = name
         self.font = pygame.font.SysFont('Consolas', 40)
         self.__value = value
@@ -116,24 +135,37 @@ class Resistor(pygame.Rect):
         self.top = top
         self.width = width
         self.height = height
+        self.is_invisible = is_invisible
+        self.is_choosable = is_choosable
 
         # flip Resistor vertical if True else horizontal
         if is_vertical:
             temp = self.width
             self.width = self.height
             self.height = temp
-            
-        if is_invisible:
-            self.color = (255,255,255)
+
+        if self.is_invisible:
+            self.color = (255, 255, 255)
+            self.name = ""
         else:
             self.color = (90, 90, 90)
 
+        if self.is_choosable:
+            self.name = "R?"
+        else:
+            self.name = name
+
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, [self.left, self.top, self.width, self.height])
-        screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top))
+        pygame.draw.rect(screen, self.color, [
+                         self.left, self.top, self.width, self.height])
+        screen.blit(self.font.render(self.name, True,
+                                     COLOR_BLACK), (self.left, self.top))
 
     def collide_with_mouse(self, mouse):
-        self.collidepoint(mouse)
+        """Check if the mouse is within rect borders of a given object"""
+        return self.left <= mouse[0] <= self.left + self.width and \
+            self.top - self.width <= mouse[1] <= self.top + self.height
+
     @property
     def value(self):
         return self.__value
@@ -142,7 +174,7 @@ class Resistor(pygame.Rect):
 class Switch:
     """Simple Switch class that renders self on the screen and handles collision with the mouse"""
 
-    def __init__(self, name, left, top, radius, mode_on=1):
+    def __init__(self, name, left, top, radius, mode_on=1, is_invisible=False, is_choosable=False):
         self.name = name
         self.font = pygame.font.SysFont('Consolas', 40)
         self.left = left
@@ -150,44 +182,48 @@ class Switch:
         self.width = 65
         self.radius = radius
         self.mode = mode_on
+        self.is_invisible = is_invisible
+        self.is_choosable = is_choosable
+
+        if self.is_invisible:
+            self.color = (255, 255, 255)
+            self.name = ""
+        else:
+            self.color = (0, 0, 0)
+
+        if self.is_choosable:
+            self.name = "S?"
+        else:
+            self.name = name
 
     def draw(self, screen):
-        pygame.draw.circle(screen, COLOR_BLACK, (self.left, self.top), self.radius)
-        pygame.draw.circle(screen, COLOR_WHITE, (self.left, self.top), self.radius-3)
+        pygame.draw.circle(screen, self.color,
+                           (self.left, self.top), self.radius)
+        pygame.draw.circle(screen, COLOR_WHITE,
+                           (self.left, self.top), self.radius-3)
 
-        pygame.draw.circle(screen, COLOR_BLACK, (self.left+self.width, self.top), self.radius)
-        pygame.draw.circle(screen, COLOR_WHITE, (self.left+self.width, self.top), self.radius-3)
+        pygame.draw.circle(screen, self.color,
+                           (self.left+self.width, self.top), self.radius)
+        pygame.draw.circle(screen, COLOR_WHITE,
+                           (self.left+self.width, self.top), self.radius-3)
 
         pygame.draw.line(screen, COLOR_WHITE, (self.left+self.radius-1, self.top),
                          (self.left+self.width-self.radius, self.top), 15)
-        pygame.draw.line(screen, COLOR_BLACK, (self.left, self.top-self.radius),
+        pygame.draw.line(screen, self.color, (self.left, self.top-self.radius),
                          (self.left + self.width, self.top-(self.radius*self.mode)), 5)
-        screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top+self.radius))
+        screen.blit(self.font.render(self.name, True, self.color),
+                    (self.left, self.top+self.radius))
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse is within rect borders of a given object"""
         return self.left-self.radius <= mouse[0] <= self.left+self.width+self.radius and \
-               self.top-self.radius <= mouse[1] <= self.top+7.5+self.radius
-                 
-    def is_colliding(self, other_object):
-        """Handles collision with these objects: Diode, Resistor, PowerSupply"""
-        if type(other_object) is Diode:
-            hypotenuse = sqrt(((self.left - other_object.left)**2) + ((self.top - other_object.top)**2))
-            return hypotenuse <= other_object.radius
-
-        if type(other_object) is Resistor:
-            return other_object.left <= self.left <= other_object.left + other_object.width and \
-                    other_object.top <= self.top <= other_object.top + other_object.height
-
-        if type(other_object) is PowerSupply:
-            return other_object.left <= self.left <= other_object.left+35 and \
-                    other_object.top-50 <= self.top <= other_object.top+50   
+            self.top-self.radius <= mouse[1] <= self.top+7.5+self.radius
 
 
 class PowerSupply:
     """Simple PowerSupply class that renders self on the screen and handles collision with the mouse"""
 
-    def __init__(self, name, value, left, top):
+    def __init__(self, name, value, left, top, is_invisible=False, is_choosable=False):
         self.name = name
         self.font = pygame.font.SysFont('Consolas', 40)
         self.value = value
@@ -197,22 +233,34 @@ class PowerSupply:
         self.width = 35
         self.small_offset = 20  # small line of component
         self.big_offset = 50    # bigger line of component
+        self.is_invisible = is_invisible
+        self.is_choosable = is_choosable
 
+        if self.is_invisible:
+            self.color = (255, 255, 255)
+            self.name = ""
+        else:
+            self.color = (0, 0, 0)
+
+        if self.is_choosable:
+            self.name = "PS?"
+        else:
+            self.name = name
     def draw(self, screen):
-        pygame.draw.line(screen, COLOR_BLACK, (self.left, self.top - self.big_offset),
+        pygame.draw.line(screen, self.color, (self.left, self.top - self.big_offset),
                          (self.left, self.top + self.big_offset), 5)
         pygame.draw.line(screen, COLOR_WHITE, (self.left+3, self.top),
                          (self.left+self.width, self.top), 15)
-        pygame.draw.line(screen, COLOR_BLACK, (self.left+self.width, self.top-self.small_offset),
+        pygame.draw.line(screen, self.color, (self.left+self.width, self.top-self.small_offset),
                          (self.left+self.width, self.top+self.small_offset), 5)
-        screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top+self.big_offset))
+        screen.blit(self.font.render(self.name, True, self.color),
+                    (self.left, self.top+self.big_offset))
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse is within rect borders of a given object"""
         return self.left <= mouse[0] <= self.left+self.width and \
-               self.top-self.big_offset <= mouse[1] <= self.top+self.big_offset
-  
-   
+            self.top-self.big_offset <= mouse[1] <= self.top+self.big_offset
+
 
 class MultiMeter(pygame.Rect):
     """Simple MultiMeter class inherited from 'pygame.Rect'
@@ -239,33 +287,40 @@ class MultiMeter(pygame.Rect):
         self.pin_radius = 15
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, [self.left, self.top, self.width, self.height])
-        pygame.draw.rect(screen, COLOR_WHITE, [self.left+10, self.top+10, 180, 100])
+        pygame.draw.rect(screen, self.color, [
+                         self.left, self.top, self.width, self.height])
+        pygame.draw.rect(screen, COLOR_WHITE, [
+                         self.left+10, self.top+10, 180, 100])
 
-        screen.blit(self.font.render(self.name, True, COLOR_BLACK), (self.left, self.top+self.height/2))
-        screen.blit(self.display_font.render(self.display_text, True, COLOR_BLACK), (self.left+15, self.top+50))
+        screen.blit(self.font.render(self.name, True, COLOR_BLACK),
+                    (self.left, self.top+self.height/2))
+        screen.blit(self.display_font.render(self.display_text,
+                                             True, COLOR_BLACK), (self.left+15, self.top+50))
         pygame.draw.line(screen, COLOR_BLACK, (self.left+75, self.top + self.height-50),
                          (self.pin_left, self.pin_top), 5)
-        pygame.draw.circle(screen, COLOR_BLACK, (self.pin_left, self.pin_top), self.pin_radius)
+        pygame.draw.circle(screen, COLOR_BLACK,
+                           (self.pin_left, self.pin_top), self.pin_radius)
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse position is shorter or equal than the radius"""
-        hypotenuse = sqrt(((self.pin_left-mouse[0])**2) + ((self.pin_top-mouse[1])**2))
+        hypotenuse = sqrt(
+            ((self.pin_left-mouse[0])**2) + ((self.pin_top-mouse[1])**2))
         return hypotenuse <= self.pin_radius
 
     def is_colliding(self, other_object):
         """Handles collision with these objects: Diode, Resistor, PowerSupply"""
         if type(other_object) is Diode:
-            hypotenuse = sqrt(((self.pin_left - other_object.left)**2) + ((self.pin_top - other_object.top)**2))
+            hypotenuse = sqrt(((self.pin_left - other_object.left)
+                               ** 2) + ((self.pin_top - other_object.top)**2))
             return hypotenuse <= self.pin_radius + other_object.radius
 
         if type(other_object) is Resistor:
             return other_object.left <= self.pin_left <= other_object.left + other_object.width and \
-                    other_object.top <= self.pin_top <= other_object.top + other_object.height
+                other_object.top <= self.pin_top <= other_object.top + other_object.height
 
         if type(other_object) is PowerSupply:
             return other_object.left <= self.pin_left <= other_object.left+35 and \
-                   other_object.top-50 <= self.pin_top <= other_object.top+50
+                other_object.top-50 <= self.pin_top <= other_object.top+50
 
     def follow_mouse(self, mouse):
         """Multimeter follows the mouse when dragged"""

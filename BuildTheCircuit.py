@@ -13,6 +13,8 @@ next_btn = Button(520, 400, 150, 100, (170, 170, 170), "Další")
 
 tasks = [task1, task2, task3]
 components = []
+invisible_components = []
+choosable_components = []
 
 offset_x = 0
 offset_y = 0
@@ -34,37 +36,31 @@ while running:
         elif e.type == MOUSEBUTTONDOWN:
             if e.button == 1:
                 draging = True
-                #if r3.collide_with_mouse(e.pos):
-                if r3.collidepoint(e.pos):
-                    print("asdsa")
-                    mouse_x, mouse_y = e.pos
-                    offset_x = r3.left - mouse_x
-                    offset_y = r3.top - mouse_y
+                for ch_component in choosable_components:
+                    if ch_component.collide_with_mouse(e.pos):
+                        mouse_x, mouse_y = e.pos
+                        offset_x = ch_component.left - mouse_x
+                        offset_y = ch_component.top - mouse_y
 
         elif e.type == MOUSEBUTTONUP:
             if e.button == 1:
                 draging = False
-                #if r3.is_colliding(r1):
-                if r3.colliderect(r1):
-                    won_the_round = True
-                    task_id += 1
-                    r3.width = 0
-                    r3.height = 0
-                    r3.name = ""
-                    r1.color = (90,90,90)
-                    r1.name = "R1"
-                   
-                    print("volam")
-                else:
-                    r3.left = 1100
-                    r3.top = 50
-                
+                for ch_component in choosable_components:
+                    for inv_component in invisible_components:
+                        if ch_component.is_colliding(inv_component):
+                            #won_the_round = True
+                            #task_id += 1
+                            ch_component.color = (0,0,0)
+                            inv_component.color = (90,90,90)
+                    else:
+                        ch_component.left = 1100
+                        ch_component.top = 50
         elif e.type == pygame.MOUSEMOTION:
-            if draging and r3.collidepoint(e.pos):
-                mouse_x, mouse_y = e.pos
-                r3.left = mouse_x + offset_x
-                r3.top = mouse_y + offset_y
-
+            for ch_component in choosable_components:
+                if draging and ch_component.collide_with_mouse(e.pos):
+                    mouse_x, mouse_y = e.pos
+                    ch_component.left = mouse_x + offset_x
+                    ch_component.top = mouse_y + offset_y
     # Background color
     screen.fill((255, 255, 255))
 
@@ -81,19 +77,16 @@ while running:
         if next_round(screen, mouse, task_id, components, tasks):
             won_the_round = False
 
-    elif task_id == len(tasks):
+    if task_id == len(tasks):
         if end_round(screen,mouse):
             pygame.quit()
         
     for component in components:
-        if component.name == "R1": 
-            r1 = component
-            r1.name = ""
-    
-        if component.name == "R3":
-            r3 = component
-            r3.name = "R?" 
-            
+        if component.is_invisible: 
+            invisible_components.append(component)
+        if component.is_choosable:
+            choosable_components.append(component) 
+
         component.draw(screen)
     
     pygame.display.flip()

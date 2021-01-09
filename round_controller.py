@@ -1,6 +1,6 @@
 import pygame
-from pygame.constants import K_NUMLOCKCLEAR, MOUSEBUTTONDOWN, MOUSEBUTTONUP
-from Components import  Button
+from pygame.constants import MOUSEBUTTONDOWN
+from Components import Button
 from task_loader import load_scheme
 from constants import *
 
@@ -17,6 +17,7 @@ end_screen = win_font.render("Konec", True, (0, 0, 0))
 
 
 def next_round(screen, mouse, task_id, components, tasks):
+    # Diplay a text and button on the screen
     screen.blit(win_screen, ((SCREEN_WIDTH - win_screen.get_width()) /
                              2, ((SCREEN_HEIGHT - win_screen.get_height())/2)-50))
 

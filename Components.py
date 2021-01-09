@@ -1,5 +1,6 @@
 import pygame
 from math import sqrt
+from constants import COLOR_WHITE, COLOR_BLACK
 
 """
 This file contents list of component classes used in our game.
@@ -12,9 +13,6 @@ Classes are:
     PowerSupply
     MultiMeter
 """
-
-COLOR_BLACK = (0, 0, 0)
-COLOR_WHITE = (255, 255, 255)
 
 
 class Button(pygame.Rect):
@@ -106,7 +104,7 @@ class Diode:
 class Resistor:
     """Simple Resistor class that renders self on the screen."""
 
-    def __init__(self, name, value, left, top, is_vertical=False, width=160, height=70):
+    def __init__(self, name, value, left, top, is_vertical=False, is_invisible=False, width=160, height=70):
         self.name = name
         self.font = pygame.font.SysFont('Consolas', 40)
         self.__value = value
@@ -122,7 +120,11 @@ class Resistor:
             self.width = self.height
             self.height = temp
 
-        self.color = (90, 90, 90)
+
+        if is_invisible:
+            self.color = (255,255,255)
+        else:
+            self.color = (90, 90, 90)
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, [self.left, self.top, self.width, self.height])
@@ -255,3 +257,9 @@ class MultiMeter(pygame.Rect):
         """Multimeter follows the mouse when dragged"""
         self.pin_left = mouse[0]
         self.pin_top = mouse[1]
+
+    def reset(self):
+        """If mouse is not holding multimeter, reset its position, and display zero values"""
+        self.pin_left = 1055
+        self.pin_top = 450
+        self.display_text = "0.0"

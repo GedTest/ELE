@@ -18,7 +18,7 @@ class WindowManager(ScreenManager):
 
 # loads different .kv files
 # file.kv is like a CSS to HTML, basically styles
-kv = Builder.load_file('Gui.kv')
+kv = Builder.load_file('gui.kv')
 
 
 class MainMenu(App):

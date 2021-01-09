@@ -1,42 +1,47 @@
 import pygame
+#import json
+from constants import *
+#from components import Resistor, Diode, Button, Switch, PowerSupply, MultiMeter
+from components import Button, MultiMeter
+from data_build_circuit_true_false import task1, task2, task3
+from task_loader import load_scheme
+from round_controller import end_round, next_round
 
-import json
-from components import Resistor, Diode, Button, Switch, PowerSupply, MultiMeter, COLOR_BLACK, COLOR_WHITE
-
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 800
-COLOR_GREEN = (0, 255, 0)
-COLOR_RED = (255, 0, 0)
-
-pygame.init()
+#pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 level_answer = ''
 player_guess = ''
 
-f_btn = Button(1000, 600, 150, 100, (170, 170, 170), "No")
-t_btn = Button(50, 600, 150, 100, (170, 170, 170), "Yes")
+next_btn = Button(520, 400, 150, 100, (170, 170, 170), "Další")
+f_btn = Button(1000, 600, 150, 100, COLOR_GREY, "No")
+t_btn = Button(50, 600, 150, 100, COLOR_GREY, "Yes")
 
-with open("data_file.json", "r") as components_file:
-    data = json.load(components_file)
+#with open("data_file.json", "r") as components_file:
+#    data = json.load(components_file)
 
+tasks = [task1, task2, task3]
+task_id = 0
+won_the_round = False
 all_components = []
-for key in data.keys():
-    if key != "level_answer":
-        if data[key]["type"] == "Diode":
-            all_components.append(Diode(data[key]["name"], data[key]["value"], data[key]["left"],
-                                        data[key]["top"], data[key]["radius"]))
-        if data[key]["type"] == "Resistor":
-            all_components.append(Resistor(data[key]["name"], data[key]["value"], data[key]["left"],
-                                           data[key]["top"], data[key]["is_vertical"]))
-        if data[key]["type"] == "Switch":
-            all_components.append(Switch(data[key]["name"], data[key]["left"], data[key]["top"], data[key]["radius"],
-                                         data[key]["mode_on"]))
-        if data[key]["type"] == "PowerSupply":
-            all_components.append(PowerSupply(data[key]["name"], data[key]["value"], data[key]["left"],
-                                              data[key]["top"]))
-    else:
-        level_answer = data[key]
+#for key in data.keys():
+#    if key != "level_answer":
+#        if data[key]["type"] == "Diode":
+#            all_components.append(Diode(data[key]["name"], data[key]["value"], data[key]["left"],
+#                                        data[key]["top"], data[key]["radius"]))
+#        if data[key]["type"] == "Resistor":
+#            all_components.append(Resistor(data[key]["name"], data[key]["value"], data[key]["left"],
+#                                           data[key]["top"], data[key]["is_vertical"]))
+#        if data[key]["type"] == "Switch":
+#            all_components.append(Switch(data[key]["name"], data[key]["left"], data[key]["top"], data[key]["radius"],
+#                                         data[key]["mode_on"]))
+#        if data[key]["type"] == "PowerSupply":
+#            all_components.append(PowerSupply(data[key]["name"], data[key]["value"], data[key]["left"],
+#                                              data[key]["top"]))
+#    else:
+#        level_answer = data[key]
+
+level_answer = load_scheme(tasks[task_id], all_components)
 
 multi_meter = MultiMeter(980, 100, 200, 300)
 all_components.append(multi_meter)
@@ -68,9 +73,7 @@ while running:
 
         elif e.type == pygame.MOUSEBUTTONUP:
             dragging = False
-            multi_meter.pin_left = 1055
-            multi_meter.pin_top = 450
-            multi_meter.display_text = "0.0"
+            multi_meter.reset()
         # ----------multi-meter----------
 
     # Background color
@@ -95,11 +98,28 @@ while running:
 
     # Compare player's guest with correct answer and display it on the screen
     if player_guess:
-        result = "Correct" if player_guess == level_answer else "Incorrect"
-        result_color = COLOR_GREEN if player_guess == level_answer else COLOR_RED
-        font = pygame.font.SysFont('Consolas', 60)
-        text = font.render(result, True, result_color)
-        screen.blit(text, (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2))
+        #result = "Correct" if player_guess == level_answer else "Incorrect"
+        #result_color = COLOR_GREEN if player_guess == level_answer else COLOR_RED
+        #font = pygame.font.SysFont('Consolas', 60)
+        #text = font.render(result, True, result_color)
+        #screen.blit(text, (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2))
+
+        # if player won
+        if player_guess == level_answer:
+            won_the_round = True
+            task_id += 1
+        else:
+            font = pygame.font.SysFont('Consolas', 60)
+            text = font.render("Špatně!", True, COLOR_RED)
+            screen.blit(text, (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2))
+
+    if won_the_round and task_id != len(tasks):
+        if next_round(screen, mouse, task_id, all_components, tasks):
+            won_the_round = False
+
+    elif task_id == len(tasks):
+        if end_round(screen, mouse):
+            pygame.quit()
 
     pygame.display.flip()
     pygame.display.update()

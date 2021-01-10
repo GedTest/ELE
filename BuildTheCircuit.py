@@ -16,22 +16,32 @@ components = []
 invisible_components = []
 choosable_components = []
 
+
 offset_x = 0
 offset_y = 0
 task_id = 0
+ch_left = 0
+ch_top = 0
 draging = False
 won_the_round = False
 running = True
 
 load_scheme(tasks[task_id], components)
 
+for component in components:
+    if component.is_invisible: 
+        invisible_components.append(component)
+    if component.is_choosable:
+        choosable_components.append(component)
+
+
+
 while running:
     mouse = pygame.mouse.get_pos()
-
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
-
+       
         # checks if a mouse is clicked
         elif e.type == MOUSEBUTTONDOWN:
             if e.button == 1:
@@ -39,6 +49,10 @@ while running:
                 for ch_component in choosable_components:
                     if ch_component.collide_with_mouse(e.pos):
                         mouse_x, mouse_y = e.pos
+                        ch_top = ch_component.top
+                        ch_left = ch_component.left
+                        print(ch_top)
+                        print(ch_left)
                         offset_x = ch_component.left - mouse_x
                         offset_y = ch_component.top - mouse_y
 
@@ -48,19 +62,30 @@ while running:
                 for ch_component in choosable_components:
                     for inv_component in invisible_components:
                         if ch_component.is_colliding(inv_component):
-                            #won_the_round = True
-                            #task_id += 1
-                            ch_component.color = (0,0,0)
-                            inv_component.color = (90,90,90)
-                    else:
-                        ch_component.left = 1100
-                        ch_component.top = 50
+                            # Remove current choosable component from a components and choosable_components list, that it cannnot be drawn
+                            choosable_components.remove(ch_component)
+                            components.remove(ch_component)
+                            # Invisible component will be visible 
+                            inv_component.color = COLOR_BLACK
+
+                            # if 
+                            if len(choosable_components) == 0:
+                                won_the_round = True
+                                task_id += 1
+                        else:
+                            ch_component.left = ch_left
+                            ch_component.top = ch_top
+                            ch_left = 0
+                            ch_top = 0
+
         elif e.type == pygame.MOUSEMOTION:
             for ch_component in choosable_components:
                 if draging and ch_component.collide_with_mouse(e.pos):
                     mouse_x, mouse_y = e.pos
                     ch_component.left = mouse_x + offset_x
                     ch_component.top = mouse_y + offset_y
+           
+
     # Background color
     screen.fill((255, 255, 255))
 
@@ -82,13 +107,8 @@ while running:
             pygame.quit()
         
     for component in components:
-        if component.is_invisible: 
-            invisible_components.append(component)
-        if component.is_choosable:
-            choosable_components.append(component) 
-
         component.draw(screen)
-    
+        
     pygame.display.flip()
     pygame.display.update()
 pygame.quit()

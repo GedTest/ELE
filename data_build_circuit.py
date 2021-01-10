@@ -26,7 +26,7 @@ task1 = [
     "top": 125,
     "value": 60.0,
     "is_vertical": False,
-    "is_invisible": False,
+    "is_invisible": True,
     "is_choosable": False
   },
   {
@@ -45,9 +45,9 @@ task1 = [
     "left": 1100,
     "top": 50,
     "value": 20.0,
-    "is_vertical": True,
+    "is_vertical": False,
     "is_invisible": False,
-    "is_choosable": False
+    "is_choosable": True
   },
    {
     "type": "Switch",
@@ -98,7 +98,7 @@ task2 = [
     "top": 125,
     "value": 60.0,
     "is_vertical": False,
-    "is_invisible": True,
+    "is_invisible": False,
     "is_choosable": False
   },
   {

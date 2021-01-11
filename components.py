@@ -70,17 +70,17 @@ class Component:
     def is_colliding(self, component):
         """Handles collision with these objects: Diode, Resistor, PowerSupply"""
         if type(component) is Diode:
-            hypotenuse = sqrt(((self.pin_left - component.left) ** 2)
-                              + ((self.pin_top - component.top) ** 2))
-            return hypotenuse <= self.pin_radius + component.radius
+            distance = sqrt(((self.left - component.left) ** 2)
+                            + ((self.top - component.top) ** 2))
+            return distance <= component.radius
 
         if type(component) is Resistor:
-            return component.left <= self.pin_left <= component.left + component.width and \
-                   component.top <= self.pin_top <= component.top + component.height
+            return component.left <= self.left <= component.left + component.width and \
+                   component.top <= self.top <= component.top + component.height
 
         if type(component) is PowerSupply:
-            return component.left <= self.pin_left <= component.left + 35 \
-                   and component.top - 50 <= self.pin_top <= component.top + 50
+            return component.left <= self.left <= component.left + 35 \
+                   and component.top - 50 <= self.top <= component.top + 50
 
     @property
     def value(self):
@@ -118,8 +118,8 @@ class Diode(Component):
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse position is shorter or equal than the radius"""
-        hypotenuse = sqrt(((self.left - mouse[0]) ** 2) + ((self.top - mouse[1]) ** 2))
-        return hypotenuse <= self.radius
+        distance = sqrt(((self.left - mouse[0]) ** 2) + ((self.top - mouse[1]) ** 2))
+        return distance <= self.radius
 
     def is_colliding(self, other_object):
         if type(other_object) is Diode:
@@ -286,16 +286,16 @@ class MultiMeter(pygame.Rect):
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse position is shorter or equal than the radius"""
-        hypotenuse = sqrt(
+        distance = sqrt(
             ((self.pin_left-mouse[0])**2) + ((self.pin_top-mouse[1])**2))
-        return hypotenuse <= self.pin_radius
+        return distance <= self.pin_radius
 
     def is_colliding(self, other_object):
         """Handles collision with these objects: Diode, Resistor, PowerSupply"""
         if type(other_object) is Diode:
-            hypotenuse = sqrt(((self.pin_left - other_object.left)
-                               ** 2) + ((self.pin_top - other_object.top)**2))
-            return hypotenuse <= self.pin_radius + other_object.radius
+            distance = sqrt(((self.pin_left - other_object.left)
+                            ** 2) + ((self.pin_top - other_object.top)**2))
+            return distance <= self.pin_radius + other_object.radius
 
         if type(other_object) is Resistor:
             return other_object.left <= self.pin_left <= other_object.left + other_object.width and \

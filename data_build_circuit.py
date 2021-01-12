@@ -6,18 +6,8 @@ task1 = [
     "left": 500,
     "top": 150,
     "radius": 50,
-    "is_invisible": True,
-    "is_choosable": False
-  },
-  {
-    "type": "Diode",
-    "name": "D2",
-    "value": 60.0,
-    "left": 1100,
-    "top": 200,
-    "radius": 50,
     "is_invisible": False,
-    "is_choosable": True
+    "is_choosable": False
   },
   {
     "type": "Resistor",
@@ -26,7 +16,7 @@ task1 = [
     "top": 125,
     "value": 60.0,
     "is_vertical": False,
-    "is_invisible": False,
+    "is_invisible": True,
     "is_choosable": False
   },
   {
@@ -38,6 +28,16 @@ task1 = [
     "is_vertical": False,
     "is_invisible": False,
     "is_choosable": False
+  },
+    {
+    "type": "Resistor",
+    "name": "R3",
+    "left": 1100,
+    "top": 50,
+    "value": 10.0,
+    "is_vertical": False,
+    "is_invisible": False,
+    "is_choosable": True
   },
    {
     "type": "Switch",
@@ -111,7 +111,6 @@ task2 = [
     "is_invisible": False,
     "is_choosable": False
   },
-
 ]
 
 task3 = [

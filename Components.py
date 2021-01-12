@@ -75,8 +75,8 @@ class Component:
             return distance <= component.radius
 
         if type(component) is Resistor:
-            return component.left <= self.left <= component.left + component.width and \
-                   component.top <= self.top <= component.top + component.height
+            return self.left <= component.left <= self.left + self.width and \
+                   self.top <= component.top <= self.top + self.height
 
         if type(component) is PowerSupply:
             return component.left <= self.left <= component.left + 35 \
@@ -120,13 +120,6 @@ class Diode(Component):
         """Check if the mouse position is shorter or equal than the radius"""
         distance = sqrt(((self.left - mouse[0]) ** 2) + ((self.top - mouse[1]) ** 2))
         return distance <= self.radius
-
-    def is_colliding(self, other_object):
-        if type(other_object) is Diode:
-            return True
-        else:
-            return False
-
     @property
     def switch_on(self):
         return self.__switch_on

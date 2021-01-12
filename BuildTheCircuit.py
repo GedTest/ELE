@@ -16,7 +16,6 @@ components = []
 invisible_components = []
 choosable_components = []
 
-
 offset_x = 0
 offset_y = 0
 task_id = 0
@@ -100,6 +99,7 @@ while running:
 
     if won_the_round and task_id != len(tasks):
         if next_round(screen, mouse, task_id, components, tasks):
+            load_list()
             won_the_round = False
 
     if task_id == len(tasks):

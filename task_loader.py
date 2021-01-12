@@ -4,7 +4,7 @@ import pygame
 pygame.init()
 
 
-with open("json.json", "r") as components_file:
+with open("data_schemes.json", "r") as components_file:
    data = json.load(components_file)
 
 def load_scheme(task,components):
@@ -23,6 +23,3 @@ def load_scheme(task,components):
                                     key["mode_on"], key["is_invisible"], key["is_choosable"]))
         if key["type"] == "PowerSupply":
             components.append(PowerSupply(key["name"], key["value"], key["left"], key["top"],  key["is_invisible"], key["is_choosable"]))
-
-
-

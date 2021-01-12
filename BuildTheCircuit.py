@@ -1,6 +1,7 @@
+from os import terminal_size
 import pygame
 from pygame.constants import MOUSEBUTTONDOWN, MOUSEBUTTONUP
-from Components import Button
+from Components import Button, Resistor
 from task_loader import load_scheme
 from constants import *
 from round_controller import end_round, next_round
@@ -10,7 +11,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 next_btn = Button(520, 400, 150, 100, (170, 170, 170), "Další")
 
-tasks = ["task1"]
+tasks = ["task1", "task2"]
 components = []
 invisible_components = []
 choosable_components = []
@@ -18,8 +19,8 @@ choosable_components = []
 offset_x = 0
 offset_y = 0
 task_id = 0
-ch_left = 0
 ch_top = 0
+ch_left = 0
 draging = False
 won_the_round = False
 running = True
@@ -50,40 +51,45 @@ while running:
                         offset_x = ch_component.left - mouse_x
                         offset_y = ch_component.top - mouse_y
                         ch_top = ch_component.top
+                        ch_left = ch_component.left
+                        ch_component.drag = True # flag
 
         elif e.type == MOUSEBUTTONUP:
             if e.button == 1:
                 draging = False
                 for ch_component in choosable_components:
-                    for inv_component in invisible_components:
-                        if ch_component.is_colliding(inv_component):
-                            print("koliduji")
+                    if ch_component.drag:
+                        for inv_component in invisible_components:
+                            if ch_component.is_colliding(inv_component):
+                                # Remove current choosable component from a components and choosable_components list, that it cannnot be drawn
+                                choosable_components.remove(ch_component)
+                                invisible_components.remove(inv_component)
+                                components.remove(ch_component)
 
-                            # Remove current choosable component from a components and choosable_components list, that it cannnot be drawn
-                            choosable_components.remove(ch_component)
-                            invisible_components.remove(inv_component)
-                            components.remove(ch_component)
+                                # Invisible component will be visible 
+                                if isinstance(inv_component, Resistor):
+                                    inv_component.color = COLOR_LIGHT_GREY
+                                    inv_component.color_text = COLOR_BLACK
+                                 
+                                else:
+                                    inv_component.color = COLOR_BLACK  
 
-                            # Invisible component will be visible 
-                            inv_component.color = COLOR_BLACK
-
-                            # if 
-                            if len(choosable_components) == 0:
-                                won_the_round = True
-                                task_id += 1
+                                if len(choosable_components) == 0:
+                                    won_the_round = True
+                                    task_id += 1
                             
                         else:
-                            ch_component.left = 1100
+                            ch_component.drag = False
+                            ch_component.left = ch_left
                             ch_component.top = ch_top
-                            break   
 
         elif e.type == pygame.MOUSEMOTION:
             for ch_component in choosable_components:
-                if draging and ch_component.collide_with_mouse(e.pos):
+                if ch_component.drag and draging:
                     mouse_x, mouse_y = e.pos
                     ch_component.left = mouse_x + offset_x
                     ch_component.top = mouse_y + offset_y
-           
+                    
 
     # Background color
     screen.fill((255, 255, 255))

@@ -57,29 +57,31 @@ class Component:
         self.value = value
         self.left = left
         self.top = top
+        self.drag = False
         self.is_invisible = is_invisible
         self.is_choosable = is_choosable
 
         if self.is_invisible:
             self.color = COLOR_WHITE
-            self.name = ""
 
         else:
             self.color = COLOR_BLACK
 
     def is_colliding(self, component):
         """Handles collision with these objects: Diode, Resistor, PowerSupply"""
-
-        if type(component) is Diode:
+        if isinstance(self, Diode) and isinstance(component, Diode):
             distance = sqrt(((self.left - component.left) ** 2)
                             + ((self.top - component.top) ** 2))
             return distance <= component.radius
 
-        if type(component) is Resistor:
-           return component.left <= self.left <= component.left + component.width or \
-                component.top <= self.top <= component.top + component.height
 
-        if type(component) is PowerSupply:
+        if isinstance(self, Resistor) and isinstance(component, Resistor):
+           print(self.left)
+           print(self.top)
+           return component.left <= self.left  <= component.left + component.width and \
+                component.top <= self.top   <= component.top + component.height
+
+        if isinstance(self, PowerSupply) and isinstance(component, PowerSupply): 
             return component.left <= self.left <= component.left + 35 \
                    and component.top - 50 <= self.top <= component.top + 50
 
@@ -149,6 +151,7 @@ class Resistor(Component):
         self.unit = '\u03A9'
         self.width = width
         self.height = height
+        self.color_text = COLOR_BLACK
 
         # flip Resistor vertical if True else horizontal
         if is_vertical:
@@ -158,15 +161,16 @@ class Resistor(Component):
 
         if self.is_invisible:
             self.color = COLOR_WHITE
-            self.name = ""
+            self.color_text = COLOR_WHITE
         else:
             self.color = COLOR_LIGHT_GREY
+            self.color_text = COLOR_BLACK
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, [
                          self.left, self.top, self.width, self.height])
         screen.blit(self.font.render(self.name, True,
-                                     COLOR_BLACK), (self.left, self.top))
+                                     self.color_text), (self.left, self.top))
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse is within rect borders of a given object"""

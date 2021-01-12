@@ -6,9 +6,10 @@ def load_scheme(task, all_components):
         all_components.clear()
 
     for key in task:
+        # make exception for true_false_circuit
+        # level that needs level_answer
         if "level_answer" in key:
-            print(key["level_answer"])
-            return key["level_answer"]
+            continue
 
         if key["type"] == "Diode":
             all_components.append(Diode(key["name"], key["value"], key["left"],
@@ -22,4 +23,8 @@ def load_scheme(task, all_components):
         if key["type"] == "PowerSupply":
             all_components.append(PowerSupply(key["name"], key["value"], key["left"], key["top"]))
 
-    return
+
+def get_level_answer(task):
+    for key in task:
+        if "level_answer" in key:
+            return key["level_answer"]

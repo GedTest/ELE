@@ -1,4 +1,4 @@
-## Who we are ?
+## Who are we ?
 we are students of the third year of the IT field at the [**SSPU school in Opava**](https://www.sspu-opava.cz/cs/) in the Czech Republic
 
 We present you our joint semi-annual project on the topic of educational applications.

@@ -58,7 +58,7 @@ task1 = [
         "top": 155
     },
     {
-        "level_answer": "No"
+        "level_answer": "Ne"
     }
 ]
 
@@ -129,7 +129,9 @@ task2 = [
         "left": 300,
         "top": 155
     },
-    #"Yes"
+    {
+        "level_answer": "Ano"
+    }
 ]
 
 task3 = [
@@ -165,5 +167,7 @@ task3 = [
         "left": 300,
         "top": 155
     },
-    #"Yes"
+    {
+        "level_answer": "Ano"
+    }
 ]

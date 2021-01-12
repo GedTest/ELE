@@ -1,7 +1,6 @@
 import pygame
 from pygame.constants import MOUSEBUTTONDOWN, MOUSEBUTTONUP
 from Components import Button
-from data_build_circuit import task1, task2, task3
 from task_loader import load_scheme
 from constants import *
 from round_controller import end_round, next_round
@@ -11,7 +10,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 next_btn = Button(520, 400, 150, 100, (170, 170, 170), "Další")
 
-tasks = [task1, task2, task3]
+tasks = ["task1"]
 components = []
 invisible_components = []
 choosable_components = []
@@ -24,7 +23,6 @@ ch_top = 0
 draging = False
 won_the_round = False
 running = True
-
 
 def load_list():
     for component in components:
@@ -41,7 +39,7 @@ while running:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
-       
+        
         # checks if a mouse is clicked
         elif e.type == MOUSEBUTTONDOWN:
             if e.button == 1:
@@ -49,12 +47,9 @@ while running:
                 for ch_component in choosable_components:
                     if ch_component.collide_with_mouse(e.pos):
                         mouse_x, mouse_y = e.pos
-                        ch_top = ch_component.top
-                        ch_left = ch_component.left
-                        print(ch_top)
-                        print(ch_left)
                         offset_x = ch_component.left - mouse_x
                         offset_y = ch_component.top - mouse_y
+                        ch_top = ch_component.top
 
         elif e.type == MOUSEBUTTONUP:
             if e.button == 1:
@@ -63,9 +58,12 @@ while running:
                     for inv_component in invisible_components:
                         if ch_component.is_colliding(inv_component):
                             print("koliduji")
+
                             # Remove current choosable component from a components and choosable_components list, that it cannnot be drawn
                             choosable_components.remove(ch_component)
+                            invisible_components.remove(inv_component)
                             components.remove(ch_component)
+
                             # Invisible component will be visible 
                             inv_component.color = COLOR_BLACK
 
@@ -73,9 +71,11 @@ while running:
                             if len(choosable_components) == 0:
                                 won_the_round = True
                                 task_id += 1
+                            
                         else:
                             ch_component.left = 1100
-                            ch_component.top = 50
+                            ch_component.top = ch_top
+                            break   
 
         elif e.type == pygame.MOUSEMOTION:
             for ch_component in choosable_components:
@@ -104,7 +104,7 @@ while running:
 
     if task_id == len(tasks):
         if end_round(screen,mouse):
-            pygame.quit()
+            break
         
     for component in components:
         component.draw(screen)

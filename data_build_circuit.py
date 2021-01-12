@@ -6,8 +6,18 @@ task1 = [
     "left": 500,
     "top": 150,
     "radius": 50,
-    "is_invisible": False,
+    "is_invisible": True,
     "is_choosable": False
+  },
+  {
+    "type": "Diode",
+    "name": "D2",
+    "value": 60.0,
+    "left": 1100,
+    "top": 150,
+    "radius": 50,
+    "is_invisible": False,
+    "is_choosable": True
   },
   {
     "type": "Resistor",

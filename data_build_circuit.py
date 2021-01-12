@@ -26,7 +26,7 @@ task1 = [
     "top": 125,
     "value": 60.0,
     "is_vertical": False,
-    "is_invisible": True,
+    "is_invisible": False,
     "is_choosable": False
   },
   {
@@ -38,16 +38,6 @@ task1 = [
     "is_vertical": False,
     "is_invisible": False,
     "is_choosable": False
-  },
-  {
-    "type": "Resistor",
-    "name": "R3",
-    "left": 1100,
-    "top": 50,
-    "value": 20.0,
-    "is_vertical": False,
-    "is_invisible": False,
-    "is_choosable": True
   },
    {
     "type": "Switch",

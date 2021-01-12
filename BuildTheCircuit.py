@@ -26,15 +26,16 @@ draging = False
 won_the_round = False
 running = True
 
+
+def load_list():
+    for component in components:
+        if component.is_invisible: 
+            invisible_components.append(component)
+        if component.is_choosable:
+            choosable_components.append(component)
+
 load_scheme(tasks[task_id], components)
-
-for component in components:
-    if component.is_invisible: 
-        invisible_components.append(component)
-    if component.is_choosable:
-        choosable_components.append(component)
-
-
+load_list()
 
 while running:
     mouse = pygame.mouse.get_pos()
@@ -62,6 +63,7 @@ while running:
                 for ch_component in choosable_components:
                     for inv_component in invisible_components:
                         if ch_component.is_colliding(inv_component):
+                            print("koliduji")
                             # Remove current choosable component from a components and choosable_components list, that it cannnot be drawn
                             choosable_components.remove(ch_component)
                             components.remove(ch_component)
@@ -73,10 +75,8 @@ while running:
                                 won_the_round = True
                                 task_id += 1
                         else:
-                            ch_component.left = ch_left
-                            ch_component.top = ch_top
-                            ch_left = 0
-                            ch_top = 0
+                            ch_component.left = 1100
+                            ch_component.top = 50
 
         elif e.type == pygame.MOUSEMOTION:
             for ch_component in choosable_components:

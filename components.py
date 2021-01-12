@@ -75,7 +75,7 @@ class Component:
             return distance <= component.radius
 
         if type(component) is Resistor:
-            return component.left <= self.left <= component.left + component.width and \
+            return component.left <= self.left <= component.left + component.width or \
                    component.top <= self.top <= component.top + component.height
 
         if type(component) is PowerSupply:

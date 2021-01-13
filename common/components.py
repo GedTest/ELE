@@ -1,6 +1,6 @@
 import pygame
 from math import sqrt
-from common.constants import *
+from constants import *
 
 """
 This file contents list of component classes used in our game.
@@ -54,6 +54,7 @@ class Component:
 
     def __init__(self, value, left, top, is_invisible=False, is_choosable=False):
         self.font = pygame.font.SysFont('Consolas', 40)
+        self.font_display = pygame.font.SysFont('Consolas', 20)
         self.value = value
         self.left = left
         self.top = top
@@ -73,6 +74,7 @@ class Component:
             distance = sqrt(((self.left - component.left) ** 2)
                             + ((self.top - component.top) ** 2))
             return distance <= component.radius
+
 
         if isinstance(self, Resistor) and isinstance(component, Resistor):
             if (component.left + component.width >= self.left and
@@ -107,6 +109,9 @@ class Diode(Component):
         self.__switch_off = COLOR_WHITE
         self.light = self.switch_off
 
+        if self.is_invisible:
+            self.display_name = "Svítidlo"
+
     def draw(self, screen):
         pygame.draw.circle(screen, self.color,
                            (self.left, self.top), self.radius)
@@ -118,6 +123,10 @@ class Diode(Component):
                          (self.left + self.radius / 1.5, self.top - self.radius / 1.5), 7)
         screen.blit(self.font.render(self.name, True, self.color),
                     (self.left, self.top+self.radius))
+
+        if self.is_invisible:          
+            screen.blit(self.font_display.render(self.display_name, True, COLOR_BLACK),
+                        (self.left - 40, self.top - 55))            
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse position is shorter or equal than the radius"""
@@ -162,6 +171,7 @@ class Resistor(Component):
         if self.is_invisible:
             self.color = COLOR_WHITE
             self.color_text = COLOR_WHITE
+            self.display_name = "Resistor"
         else:
             self.color = COLOR_LIGHT_GREY
             self.color_text = COLOR_BLACK
@@ -171,6 +181,9 @@ class Resistor(Component):
                          self.left, self.top, self.width, self.height])
         screen.blit(self.font.render(self.name, True,
                                      self.color_text), (self.left, self.top))
+        if self.is_invisible:
+            screen.blit(self.font_display.render(self.display_name, True, COLOR_BLACK),
+                    (self.left + 33, self.top - 33))  
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse is within rect borders of a given object"""
@@ -224,6 +237,9 @@ class PowerSupply(Component):
         self.small_offset = 20  # small line of component
         self.big_offset = 50    # bigger line of component
 
+        if self.is_invisible:
+            self.name_display = "Zdroj"
+
     def draw(self, screen):
         pygame.draw.line(screen, self.color,
                          (self.left, self.top - self.big_offset),
@@ -235,6 +251,9 @@ class PowerSupply(Component):
                          (self.left+self.width, self.top+self.small_offset), 5)
         screen.blit(self.font.render(self.name, True, self.color),
                     (self.left, self.top+self.big_offset))
+        if self.is_invisible:
+             screen.blit(self.font_display.render(self.name_display, True, COLOR_BLACK),
+                    (self.left - 10 , self.top - 45))           
 
     def collide_with_mouse(self, mouse):
         """Check if the mouse is within rect borders of a given object"""

@@ -76,10 +76,11 @@ class Component:
 
 
         if isinstance(self, Resistor) and isinstance(component, Resistor):
-           print(self.left)
-           print(self.top)
-           return component.left <= self.left  <= component.left + component.width and \
-                component.top <= self.top   <= component.top + component.height
+            if (component.left + component.width >= self.left and
+                component.left <= self.left + self.width and
+                component.top + component.height >= self.top and
+                    component.top <= self.top + self.height):
+                return True
 
         if isinstance(self, PowerSupply) and isinstance(component, PowerSupply): 
             return component.left <= self.left <= component.left + 35 \

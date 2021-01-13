@@ -35,14 +35,14 @@ WindowManager:
         spacing: 20
 
         Button:
-            text: 'Start game'
+            text: 'Začít hrát'
             pos_hint: {'x': 0.35, 'y': 0.0}
             on_release:
                 app.root.current = 'level'
                 root.manager.transition.direction = 'up'
 
         Button:
-            text: 'Quit'
+            text: 'Ukončit'
             pos_hint: {'x': 0.35, 'y': 0.0}
             on_press: app.stop()
 
@@ -50,18 +50,11 @@ WindowManager:
         size: root.width, root.height
 
         Label:
-            text: 'Learn electrotechnics !'
+            text: 'Nauč se elektrotechniku!'
             font_size: 60
             pos_hint:{"x":0.33,"y":0.5}
             size_hint: (None, None)
             size: (300, 100)
-           # background_color: (65/255.0, 65/255.0, 65/255.0, 1.0)
-           # canvas.before:
-           #     Color:
-           #         rgba: self.background_color
-           #     Rectangle:
-           #         size: self.size
-           #         pos: self.pos
             color: (1.0, 0.0, 0.0, 1.0)
             bold: True
 
@@ -69,18 +62,16 @@ WindowManager:
     name: 'level'
 
     Button:
-        text: 'Go back'
+        text: 'Jdi zpět'
         pos_hint: {'x': 0.35, 'y': 0.0}
         on_release:
             app.root.current = 'menu'
             root.manager.transition.direction = 'down'
     Button:
-        text: 'lvl 1'
-        pos_hint: {'x': 0.0, 'y': 0.5}
-        on_press: root.run_lvl1()
+        text: 'Poznej součástku'
+        pos_hint: {'x': 0.15, 'y': 0.5}
+        on_press: root.run_build()
     Button:
-        text: 'lvl 2'
-        pos_hint: {'x': 0.35, 'y': 0.5}
-    Button:
-        text: 'lvl 3'
-        pos_hint: {'x': 0.7, 'y': 0.5}
+        text: 'Zjisti funkčnost obvodu'
+        pos_hint: {'x': 0.55, 'y': 0.5}
+        on_press: root.run_true_false()

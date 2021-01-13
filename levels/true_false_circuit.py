@@ -72,7 +72,7 @@ while running:
 
     # Display a text on the screen
     font = pygame.font.SysFont('Consolas', 30)
-    heading = font.render("Je tohle schéma správně zapojeno??", True, COLOR_BLACK)
+    heading = font.render("Rozsvítí se žárovka?", True, COLOR_BLACK)
     screen.blit(heading, (32, 48))
 
     # Compare player's guest with correct answer and display it on the screen

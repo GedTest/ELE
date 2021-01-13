@@ -8,7 +8,12 @@ Our application / game will playfully introduce you to electrical engineering.
 > The game contains **three different modes**
 
 ## How to start the game
+install dependencies
 ```
 $ pip install -r requirements.txt
+```
+
+start the game
+```
 $ python3 kivy/main_menu.py
 ```

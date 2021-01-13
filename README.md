@@ -6,3 +6,9 @@ We present you our joint semi-annual project on the topic of educational applica
 
 Our application / game will playfully introduce you to electrical engineering.
 > The game contains **three different modes**
+
+## How to start the game
+```
+$ pip install -r requirements.txt
+$ python3 kivy/main_menu.py
+```

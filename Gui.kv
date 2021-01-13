@@ -1,0 +1,77 @@
+<Button>
+    size_hint: (0.3, None)
+    background_normal: ''
+    background_color: (65/255.0, 65/255.0, 65/255.0, 1.0)
+
+
+WindowManager:
+    MainMenuWindow:
+    LevelWindow:
+
+
+<MainMenuWindow>
+    name: 'menu'
+    size: root.width, root.height
+
+    # Background color
+    canvas.before:
+        Color:
+            rgba: (0.7, 0.7, 0.7, 1.0)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    #Background image
+    Image:
+        source: 'ELE-hra.png'
+        allow_stretch: True
+        keep_ratio: False
+        size_hint: (None, None)
+        size: (root.width, root.height)
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        spacing: 20
+
+        Button:
+            text: 'Začít hrát'
+            pos_hint: {'x': 0.35, 'y': 0.0}
+            on_release:
+                app.root.current = 'level'
+                root.manager.transition.direction = 'up'
+
+        Button:
+            text: 'Ukončit'
+            pos_hint: {'x': 0.35, 'y': 0.0}
+            on_press: app.stop()
+
+    FloatLayout:
+        size: root.width, root.height
+
+        Label:
+            text: 'Nauč se elektrotechniku!'
+            font_size: 60
+            pos_hint:{"x":0.33,"y":0.5}
+            size_hint: (None, None)
+            size: (300, 100)
+            color: (1.0, 0.0, 0.0, 1.0)
+            bold: True
+
+<LevelWindow>
+    name: 'level'
+
+    Button:
+        text: 'Jdi zpět'
+        pos_hint: {'x': 0.35, 'y': 0.0}
+        on_release:
+            app.root.current = 'menu'
+            root.manager.transition.direction = 'down'
+    Button:
+        text: 'Poznej součástku'
+        pos_hint: {'x': 0.15, 'y': 0.5}
+        on_press: root.run_build()
+    Button:
+        text: 'Zjisti funkčnost obvodu'
+        pos_hint: {'x': 0.55, 'y': 0.5}
+        on_press: root.run_true_false()

@@ -39,5 +39,6 @@ def end_round(screen, mouse):
     for e in pygame.event.get():
         if e.type == MOUSEBUTTONDOWN:
             if e.button == MOUSE_LEFT_CLICK:
+              
                 if end_btn.is_clickable(mouse):
                     return True

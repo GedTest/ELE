@@ -1,10 +1,9 @@
-from os import terminal_size
 import pygame
 from pygame.constants import MOUSEBUTTONDOWN, MOUSEBUTTONUP
-from components import Button, Resistor
-from task_loader import load_scheme
-from constants import *
-from round_controller import end_round, next_round
+from common.components import Button, Resistor
+from level_control.task_loader import load_scheme
+from common.constants import *
+from level_control.round_controller import end_round, next_round
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))

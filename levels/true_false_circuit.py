@@ -1,8 +1,7 @@
-import pygame
-from constants import *
-from components import Button, MultiMeter
-from task_loader import *
-from round_controller import end_round, next_round
+from common.constants import *
+from common.components import Button, MultiMeter
+from level_control.task_loader import *
+from level_control.round_controller import end_round, next_round
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 

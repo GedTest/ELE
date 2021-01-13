@@ -1,8 +1,8 @@
 import pygame
 from pygame.constants import MOUSEBUTTONDOWN
-from components import Button
-from task_loader import load_scheme
-from constants import *
+from common.components import Button
+from level_control.task_loader import load_scheme
+from common.constants import *
 
 pygame.init()
 
@@ -12,7 +12,8 @@ win_screen = font_win.render("Výborně!", True, COLOR_BLACK)
 end_screen = font_end.render("Dokončil jsi všechny úrovně!", True, COLOR_BLACK)
 
 next_btn = Button(520, 400, 150, 100, COLOR_DARK_GREY, "Další")
-end_btn = Button(450 , 450, 280, 100, COLOR_DARK_GREY, "Ukončit hru")
+end_btn = Button(450, 450, 280, 100, COLOR_DARK_GREY, "Ukončit hru")
+
 
 def next_round(screen, mouse, task_id, all_components, tasks):
     # Diplay a text and button on the screen

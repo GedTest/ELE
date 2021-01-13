@@ -1,6 +1,6 @@
 import pygame
 from math import sqrt
-from constants import *
+from common.constants import *
 
 """
 This file contents list of component classes used in our game.
@@ -73,7 +73,6 @@ class Component:
             distance = sqrt(((self.left - component.left) ** 2)
                             + ((self.top - component.top) ** 2))
             return distance <= component.radius
-
 
         if isinstance(self, Resistor) and isinstance(component, Resistor):
             if (component.left + component.width >= self.left and

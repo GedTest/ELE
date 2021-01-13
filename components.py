@@ -69,16 +69,20 @@ class Component:
 
     def is_colliding(self, component):
         """Handles collision with these objects: Diode, Resistor, PowerSupply"""
-        if type(component) is Diode:
+        if isinstance(self, Diode) and isinstance(component, Diode):
             distance = sqrt(((self.left - component.left) ** 2)
                             + ((self.top - component.top) ** 2))
             return distance <= component.radius
 
-        if type(component) is Resistor:
-            return component.left <= self.left <= component.left + component.width or \
-                   component.top <= self.top <= component.top + component.height
+        if isinstance(self, Resistor) and isinstance(component, Resistor):
+            print(component.left, component.top)
+            if (component.left + component.width >= self.left and
+                component.left <= self.left + self.width and
+                component.top + component.height >= self.top and
+                    component.top <= self.top + self.height):
+                return True
 
-        if type(component) is PowerSupply:
+        if isinstance(self, PowerSupply) and isinstance(component, PowerSupply):
             return component.left <= self.left <= component.left + 35 \
                    and component.top - 50 <= self.top <= component.top + 50
 

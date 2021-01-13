@@ -15,5 +15,5 @@ $ pip install -r requirements.txt
 
 start the game
 ```
-$ python3 kivy/main_menu.py
+$ python3 /kivy_menu/main_menu.py
 ```

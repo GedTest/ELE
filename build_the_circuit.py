@@ -82,9 +82,11 @@ while running:
                                 if isinstance(inv_component, Resistor): # Exception for a resistor class
                                     inv_component.color = COLOR_LIGHT_GREY
                                     inv_component.color_text = COLOR_BLACK
+                                    inv_component.is_invisible = False
 
                                 else:
                                     inv_component.color = COLOR_BLACK
+                                    inv_component.is_invisible = False
 
                                 # Run out of components
                                # if len(choosable_components) == 0:

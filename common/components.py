@@ -1,6 +1,6 @@
 import pygame
 from math import sqrt
-from constants import *
+from common.constants import *
 
 """
 This file contents list of component classes used in our game.

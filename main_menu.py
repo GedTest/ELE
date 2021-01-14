@@ -6,11 +6,11 @@ from kivy.lang import Builder
 
 
 def thread_build():
-    os.system("python levels/build_the_circuit.py")
+    os.system("python build_the_circuit.py")
 
 
 def thread_true_false():
-    os.system("python levels/true_false_circuit.py")
+    os.system("python true_false_circuit.py")
 
 
 # Creates new thread in which the Python program is going to run
@@ -41,7 +41,7 @@ class WindowManager(ScreenManager):
 
 # loads different .kv files
 # file.kv is like a CSS to HTML, basically styles
-kv = Builder.load_file('gui.kv')
+kv = Builder.load_file('kivy_menu/gui.kv')
 
 
 class MainMenu(App):

@@ -19,7 +19,7 @@ $ git clone https://github.com/GedTest/ELE.git
 $ pip install -r requirements.txt
 ```
 
-#3 run the game
+* run the game
 ```
 $ cd ELE
 $ python main_menu.py

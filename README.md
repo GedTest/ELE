@@ -7,13 +7,20 @@ We present you our joint semi-annual project on the topic of educational applica
 Our application / game will playfully introduce you to electrical engineering.
 > The game contains **three different modes**
 
-## How to start the game
-install dependencies
+
+## Setup
+* clone github repo
+```
+$ git clone https://github.com/GedTest/ELE.git
+```
+
+* install dependencies
 ```
 $ pip install -r requirements.txt
 ```
 
-start the game
+#3 run the game
 ```
-$ python3 /kivy_menu/main_menu.py
+$ cd ELE
+$ python main_menu.py
 ```

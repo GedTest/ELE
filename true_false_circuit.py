@@ -79,6 +79,11 @@ while running:
     if player_guess:
         # If player's guess matches correct answer
         if player_guess == level_answer:
+            # turn on diode to indicate correct answer
+            for cmp in all_components:
+                if isinstance(cmp, Diode):
+                    cmp.on()
+                    
             won_the_round = True
             task_id += 1               # Increment task_id to get new scheme from array
             player_guess = ''          # Reset player's guess to none

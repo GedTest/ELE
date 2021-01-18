@@ -81,7 +81,7 @@ while running:
         if player_guess == level_answer:
             # turn on diode to indicate correct answer
             for cmp in all_components:
-                if isinstance(cmp, Diode):
+                if isinstance(cmp, Diode) and level_answer == "Ano":
                     cmp.on()
                     
             won_the_round = True

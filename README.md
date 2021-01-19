@@ -12,6 +12,7 @@ Our application / game will playfully introduce you to electrical engineering.
 * clone github repo
 ```
 $ git clone https://github.com/GedTest/ELE.git
+$ cd ELE
 ```
 
 * install dependencies
@@ -21,6 +22,5 @@ $ pip install -r requirements.txt
 
 * run the game
 ```
-$ cd ELE
 $ python main_menu.py
 ```
